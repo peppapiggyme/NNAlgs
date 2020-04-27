@@ -1,0 +1,40 @@
+LSTM:
+  # LSTMs
+  backwards: 0
+  bidirectional: 0
+  n_features:
+    ChargedPFO: 6
+    NeutralPFO: 21
+    ShotPFO: 6
+    ConvTrack: 6
+  # for TD
+  n_inputs:
+    ChargedPFO: 20
+    NeutralPFO: [60,60]
+    ShotPFO: 20
+    ConvTrack: 20
+  # for LSTM
+  n_hiddens:
+    ChargedPFO: 10
+    NeutralPFO: 40
+    ShotPFO: 10
+    ConvTrack: 10 
+  n_steps:
+    ChargedPFO: 3
+    NeutralPFO: 10
+    ShotPFO: 6
+    ConvTrack: 4
+  n_layers:
+    ChargedPFO: 1
+    NeutralPFO: 1
+    ShotPFO: 1
+    ConvTrack: 1
+  n_tdd_layers:
+    ChargedPFO: 1
+    NeutralPFO: 2
+    ShotPFO: 1
+    ConvTrack: 1
+  # FC
+  n_fc1: 80
+  n_fc2: 40
+  n_classes: 5

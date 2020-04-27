@@ -1,0 +1,38 @@
+DSNN:
+  batch_norm: 1
+  n_features:
+    ChargedPFO: 6
+    NeutralPFO: 21
+    ShotPFO: 6
+    ConvTrack: 6
+  # For TDD (Phi)
+  n_inputs:
+    ChargedPFO: [20,20,20]
+    NeutralPFO: [80,80,60,60]
+    ShotPFO: [20,20,20]
+    ConvTrack: [20,20,20]
+  n_tdd:
+    ChargedPFO: 3
+    NeutralPFO: 4
+    ShotPFO: 3
+    ConvTrack: 3
+  # for Dense (F)
+  n_hiddens:
+    ChargedPFO: [20,20,20]
+    NeutralPFO: [60,40,40]
+    ShotPFO: [20,20,20]
+    ConvTrack: [20,20,20]
+  n_h:
+    ChargedPFO: 3
+    NeutralPFO: 3
+    ShotPFO: 3
+    ConvTrack: 3
+  n_steps:
+    ChargedPFO: 3
+    NeutralPFO: 10
+    ShotPFO: 6
+    ConvTrack: 4
+  # FC
+  n_fc1: 100
+  n_fc2: 50
+  n_classes: 5

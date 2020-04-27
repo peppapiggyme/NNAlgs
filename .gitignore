@@ -1,0 +1,8 @@
+__pycache__/
+__MACOSX/
+.vscode/
+.idea/
+.ipynb_checkpoints
+*.pyc
+*.log
+*~

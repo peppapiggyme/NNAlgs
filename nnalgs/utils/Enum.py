@@ -1,0 +1,1 @@
+N_CLASS_DECAYMODE: int = 5
