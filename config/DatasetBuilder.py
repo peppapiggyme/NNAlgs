@@ -19,7 +19,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "data/lmdb/decaymode/"
         self._dataset.json_dir = "data/json/decaymode/"
-        self._dataset.length = 3e7
+        self._dataset.length = 50000
         self._dataset.mode = "Dummy"
 
         self._dataset.lmdb_kwargs = {
