@@ -89,7 +89,7 @@ def train(cfg):
     model_gpu.compile(loss="categorical_crossentropy", optimizer=cfg["opt"], metrics=["categorical_accuracy"])
 
     history = model_gpu.fit(training_generator, epochs=cfg['epochs'], verbose=cfg['verbose'], callbacks=callbacks,
-                            validation_data=validation_generator, validation_steps=20000,
+                            validation_data=validation_generator, validation_steps=10,
                             max_queue_size=10, workers=cfg['workers'], use_multiprocessing=True)
 
     val_loss, epoch = min(zip(history.history["val_loss"], history.epoch))

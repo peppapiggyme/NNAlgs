@@ -42,8 +42,8 @@ def tune(cfg):
     # =======
 
     lmdb_dir = cfg['lmdb_dir']
-    length = 4e6
-    train = 2e6
+    length = 4000
+    train = 2000
     split = length - train
 
     s = np.arange(0, length)
