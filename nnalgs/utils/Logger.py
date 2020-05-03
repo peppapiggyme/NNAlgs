@@ -1,7 +1,6 @@
 import logging
 import logging.config
 
-
 def get_logger(name, msg):
     """
     :param name: string
@@ -12,7 +11,9 @@ def get_logger(name, msg):
              "INFO": logging.INFO,
              "WARNING": logging.WARNING,
              "ERROR": logging.ERROR}
-    logging.basicConfig(level=level[msg], format='== %(name)s == %(created)f %(levelname)s:\t%(message)s')
+    logging.basicConfig(level=level[msg],
+                        format='== %(name)s == %(asctime)s %(levelname)s:\t%(message)s',
+                        datefmt='%H:%M:%S')
     logger = logging.getLogger(name)
 
     return logger
