@@ -18,7 +18,7 @@ LSTM:
     ChargedPFO: 10
     NeutralPFO: 40
     ShotPFO: 10
-    ConvTrack: 10 
+    ConvTrack: 10
   n_steps:
     ChargedPFO: 3
     NeutralPFO: 10

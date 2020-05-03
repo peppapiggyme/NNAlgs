@@ -1,13 +1,11 @@
-from keras.models import Model
+import yaml
+from keras import backend as kbe
 from keras.layers import Input, Dense, LSTM, Masking, TimeDistributed, Concatenate, Bidirectional
 from keras.layers import Layer, Activation, BatchNormalization
-from keras import backend as kbe
-
+from keras.models import Model
+from tensorflow.keras import layers as tfk_layers
 # for keras tuner
 from tensorflow.keras import models as tfk_models
-from tensorflow.keras import layers as tfk_layers
-
-import yaml
 
 
 # =============
@@ -149,7 +147,6 @@ def ModelDSNN(config_file, mask_value=0.0):
 
 
 def ModelLSTM(config_file, mask_value=0.0, unroll=True):
-
     global lstm_1, lstm_2, lstm_3, lstm_4
 
     para = yaml.full_load(open(config_file))["LSTM"]

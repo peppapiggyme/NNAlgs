@@ -1,10 +1,12 @@
 import os
+from contextlib import closing
+
 import lmdb
 import numpy as np
-from contextlib import closing
 from keras.utils import to_categorical
-from nnalgs.base.DataGenerator import BaseDataGenerator
+
 from nnalgs.algs.LMDBCreators import ExampleLMDBCreator, DecayModeLMDBCreator
+from nnalgs.base.DataGenerator import BaseDataGenerator
 
 
 class ExampleDataGenerator(BaseDataGenerator):

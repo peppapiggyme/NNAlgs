@@ -1,7 +1,9 @@
+from itertools import count
+
 import lmdb
 import numpy as np
-from itertools import count
 from keras.utils import to_categorical
+
 from nnalgs.utils.Enum import N_CLASS_DECAYMODE
 
 

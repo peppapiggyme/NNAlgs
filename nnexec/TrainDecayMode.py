@@ -3,17 +3,17 @@ Training script
 """
 
 import os
-import yaml
-import numpy as np
 from functools import partial
 
+import numpy as np
+import yaml
 from keras.callbacks import EarlyStopping, CSVLogger, ReduceLROnPlateau
 from keras.utils import multi_gpu_model
 
-import nnalgs.algs.Models as ModelModule
 import config.GeneratorLoaders as GenModule
-from nnalgs.utils.Logger import get_logger
+import nnalgs.algs.Models as ModelModule
 from nnalgs.utils.CallBack import ParallelModelCheckpoint
+from nnalgs.utils.Logger import get_logger
 
 # fix random seeds for reproducibility
 SEED = 42

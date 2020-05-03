@@ -1,7 +1,7 @@
 import numpy as np
 
-from nnalgs.base.DatasetBuilder import AbsDatasetBuilder
 from nnalgs.algs.DataGenerators import DecayModeDataGenerator
+from nnalgs.base.DatasetBuilder import AbsDatasetBuilder
 from nnalgs.utils.Common import walk_dir
 
 
@@ -129,4 +129,3 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                 self._dataset.shape[name] = ()  # HC ! Be careful !
             else:
                 self._dataset.shape[name] = (self._dataset.n_steps[name], len(self._dataset.data[name]))
-

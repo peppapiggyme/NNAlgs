@@ -3,17 +3,17 @@ Tuning scripts
 """
 
 import os
-import yaml
-import numpy as np
 from functools import partial
 from itertools import islice
-from nnalgs.utils.LMDBGen import decaymode_generator
 
+import numpy as np
 import tensorflow as tf
+import yaml
 from kerastuner import HyperParameters
 from kerastuner.tuners import RandomSearch
 
 import nnalgs.algs.Models as ModelModule
+from nnalgs.utils.LMDBGen import decaymode_generator
 from nnalgs.utils.Logger import get_logger
 
 # fix random seeds for reproducibility

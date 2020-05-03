@@ -1,6 +1,7 @@
 import logging
 import logging.config
 
+
 def get_logger(name, msg):
     """
     :param name: string

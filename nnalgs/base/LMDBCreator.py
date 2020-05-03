@@ -1,10 +1,12 @@
 import os
-import lmdb
-import uproot
 import pathlib
 from abc import abstractmethod
-from nnalgs.utils.Logger import get_logger
+
+import lmdb
+import uproot
+
 from nnalgs.utils.Common import write_json, read_json
+from nnalgs.utils.Logger import get_logger
 
 
 class BaseLMDBCreator(object):
@@ -40,7 +42,7 @@ class BaseLMDBCreator(object):
 
         # pre-processing
         self._variables = []  # names, scales, offsets, ... -> part of variables.json
-        self._preproc = {}    # names: size, mean, std -> preproc.json
+        self._preproc = {}  # names: size, mean, std -> preproc.json
 
         # a specific logger for the class
         self._logger = get_logger(self.obj_name, 'INFO')

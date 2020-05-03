@@ -1,6 +1,6 @@
-from nnalgs.base.IDataset import Director
-from nnalgs.base.GeneratorLoader import BaseGenLoader
 from config.DatasetBuilder import DecayModePi0varBuilder
+from nnalgs.base.GeneratorLoader import BaseGenLoader
+from nnalgs.base.IDataset import Director
 
 
 class DecayModePi0varTrainGenLoader(BaseGenLoader):

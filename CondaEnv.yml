@@ -106,12 +106,12 @@ dependencies:
   - zlib=1.2.11=h516909a_1006
   - zstandard=0.13.0=py37he1b5a44_0
   - pip:
-    - colorama==0.4.3
-    - future==0.18.2
-    - joblib==0.14.1
-    - keras-tuner==1.0.1
-    - scikit-learn==0.22.2.post1
-    - tabulate==0.8.7
-    - terminaltables==3.1.0
-    - tqdm==4.45.0
+      - colorama==0.4.3
+      - future==0.18.2
+      - joblib==0.14.1
+      - keras-tuner==1.0.1
+      - scikit-learn==0.22.2.post1
+      - tabulate==0.8.7
+      - terminaltables==3.1.0
+      - tqdm==4.45.0
 prefix: /opt/conda/envs/decaymode
