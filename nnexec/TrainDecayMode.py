@@ -78,7 +78,7 @@ def train(cfg):
     # =========
 
     gen = getattr(GenModule, cfg['gen'])
-    training_generator, validation_generator = gen.gen_obj
+    training_generator, validation_generator = gen.generators()
 
     # ========
     # Training
