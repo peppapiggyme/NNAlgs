@@ -1,13 +1,13 @@
 import sys
-import nnexec as execModule
+import nnexec.TrainDecayMode as trainer
+import nnexec.TuneDecayMode as tuner
 
 mode = sys.argv[1]
 cfg = sys.argv[2]
-myExec = getattr(execModule, sys.argv[3])
 
 if mode == "Train":
-    myExec.train(cfg)
+    trainer.train(cfg)
 elif mode == "Tune":
-    myExec.tune(cfg)
+    tuner.tune(cfg)
 else:
     raise ValueError()
