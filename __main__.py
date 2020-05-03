@@ -1,9 +1,9 @@
 import sys
-import nnexec as ExecModule
+import nnexec as execModule
 
 mode = sys.argv[1]
 cfg = sys.argv[2]
-myExec = getattr(ExecModule, sys.argv[3])
+myExec = getattr(execModule, sys.argv[3])
 
 if mode == "Train":
     myExec.train(cfg)

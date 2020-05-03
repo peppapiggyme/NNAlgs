@@ -1,4 +1,4 @@
-from nnalgs.base.BuilderDirector import Director
+from nnalgs.base.IDataset import Director
 from nnalgs.base.GeneratorLoader import BaseGenLoader
 from config.DatasetBuilder import \
     (DecayModePi0varTrainBuilder, DecayModePi0varValidBuilder)

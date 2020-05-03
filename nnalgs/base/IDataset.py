@@ -3,9 +3,7 @@ class IDataset(object):
     def print_info(self, debug_me):
         if debug_me:
             from pprint import pprint as pp
-            print("**** This the interface of the dataset builder ****")
             pp(self.__dict__)
-            print("**** This the interface of the dataset builder ****")
 
     @property
     def obj(self):
@@ -18,3 +16,17 @@ class IDataset(object):
         dataset.load_lmdb(**self.lmdb_kwargs)
 
         return dataset
+
+
+class Director(object):
+
+    def __init__(self, builder):
+        self._builder = builder
+
+    def build_dataset(self):
+        self._builder.new_dataset()
+        self._builder.build_metadata()
+        self._builder.build_vars()
+
+    def get_dataset(self):
+        return self._builder.get_dataset()

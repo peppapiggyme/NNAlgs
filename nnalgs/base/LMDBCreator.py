@@ -19,7 +19,7 @@ class BaseLMDBCreator(object):
         :param tree_name: name of the ROOT tree
         :param lmdb_dir: path to the LMDB database
         :param json_dir: path to the JSON file
-        :param mode: dataset mode, 'Train' or 'Test'
+        :param mode: dataset mode, 'Train' or 'Validation'
         """
         self.paths = paths
         self.obj_name = obj_name
