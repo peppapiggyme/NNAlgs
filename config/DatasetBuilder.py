@@ -134,12 +134,12 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
 class DecayModePi0varTrainBuilder(DecayModePi0varBuilder):
 
     def build_metadata(self):
-        self._dataset.mode = "Train"
         super().build_metadata()
+        self._dataset.mode = "Train"
 
 
 class DecayModePi0varValidBuilder(DecayModePi0varBuilder):
 
     def build_metadata(self):
-        self._dataset.mode = "Validation"
         super().build_metadata()
+        self._dataset.mode = "Validation"
