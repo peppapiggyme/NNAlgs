@@ -6,7 +6,7 @@ from nnalgs.utils.Common import walk_dir
 
 
 class DecayModePi0varBuilder(AbsDatasetBuilder):
-    def build_metadata(self):
+    def build_metadata(self, mode):
 
         # Copy from self to Dataset object
         self._dataset.copyable = ['paths', 'tree_name', 'lmdb_dir', 'json_dir',
@@ -20,7 +20,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
         self._dataset.length = 50000
-        self._dataset.mode = "Dummy"
+        self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {
             "obj_name": "DecayModeDatasetCreator",
@@ -130,16 +130,3 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
             else:
                 self._dataset.shape[name] = (self._dataset.n_steps[name], len(self._dataset.data[name]))
 
-
-class DecayModePi0varTrainBuilder(DecayModePi0varBuilder):
-
-    def build_metadata(self):
-        super().build_metadata()
-        self._dataset.mode = "Train"
-
-
-class DecayModePi0varValidBuilder(DecayModePi0varBuilder):
-
-    def build_metadata(self):
-        super().build_metadata()
-        self._dataset.mode = "Validation"

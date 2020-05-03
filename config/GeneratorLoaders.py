@@ -1,7 +1,6 @@
 from nnalgs.base.IDataset import Director
 from nnalgs.base.GeneratorLoader import BaseGenLoader
-from config.DatasetBuilder import \
-    (DecayModePi0varTrainBuilder, DecayModePi0varValidBuilder)
+from config.DatasetBuilder import DecayModePi0varBuilder
 
 
 class DecayModePi0varTrainGenLoader(BaseGenLoader):
@@ -11,9 +10,9 @@ class DecayModePi0varTrainGenLoader(BaseGenLoader):
 
     def __init__(self):
         self._gens = tuple()
-        for builder in (DecayModePi0varTrainBuilder, DecayModePi0varValidBuilder):
-            dataset_builder = Director(builder())
-            dataset_builder.build_dataset()
+        for mode in ["Train", "Validation"]:
+            dataset_builder = Director(DecayModePi0varBuilder())
+            dataset_builder.build_dataset(mode=mode)
             dataset = dataset_builder.get_dataset()
             self._gens += (dataset.obj,)
 

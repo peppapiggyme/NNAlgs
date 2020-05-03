@@ -16,7 +16,7 @@ class AbsDatasetBuilder(object):
         self._dataset = IDataset()
 
     @abc.abstractmethod
-    def build_metadata(self):
+    def build_metadata(self, mode):
         """
         descriptions
         """
