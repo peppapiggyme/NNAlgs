@@ -2,13 +2,13 @@ DSNN:
   name: "DSNN"
   gpus: 4
   workers: 24
-  lmdb_dir: "data/lmdb/decaymode/"
+  lmdb_dir: "NNAlgs/data/lmdb/decaymode/"
   gen: "DecayModePi0varTrainGenLoader"
   model: "ModelDSNN"
-  arch: "config/ArchDSNN.yaml"
+  arch: "NNAlgs/config/ArchDSNN.yaml"
   epochs: 100
   patience: 10
-  save_dir: "saved/dsnn"
+  save_dir: "NNAlgs/saved/dsnn"
   tune: "dsnn_tune"
   tune_model: "ModelBuildDSNN"
   verbose: 1

@@ -2,13 +2,13 @@ LSTM:
   name: "LSTM"
   gpus: 4
   workers: 24
-  lmdb_dir: "data/lmdb/decaymode/"
+  lmdb_dir: "NNAlgs/data/lmdb/decaymode/"
   gen: "DecayModePi0varTrainGenLoader"
   model: "ModelLSTM"
-  arch: "config/ArchLSTM.yaml"
+  arch: "NNAlgs/config/ArchLSTM.yaml"
   epochs: 100
   patience: 10
-  save_dir: "saved/lstm"
+  save_dir: "NNAlgs/saved/lstm"
   tune: "lstm_tune"
   tune_model: "ModelBuildLSTM"
   verbose: 1
