@@ -17,8 +17,8 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         self._dataset.concrete_dataset = DecayModeDataGenerator
         self._dataset.paths = walk_dir("/data/zhangb/root_files_v61/", "data-tree")
         self._dataset.tree_name = "tree"
-        self._dataset.lmdb_dir = "data/lmdb/decaymode/"
-        self._dataset.json_dir = "data/json/decaymode/"
+        self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
+        self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
         self._dataset.length = 50000
         self._dataset.mode = "Dummy"
 
