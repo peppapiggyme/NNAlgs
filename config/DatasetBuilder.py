@@ -15,11 +15,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'log_vars', 'logabs_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data/zhangb/root_files_v61/", "data-tree")
+        self._dataset.paths = walk_dir("/data/zhangb/root_v69/", "data-tree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
-        self._dataset.length = 50000
+        self._dataset.length = 30000000
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {
@@ -34,15 +34,15 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
     def build_vars(self):
         # add new variables to branch here
         self._dataset.data = {
-            "ChargedPFO": ["ChargedPFO.phi",
+            "ChargedPFO": ["ChargedPFO.dphiECal",
                            "ChargedPFO.dphi",
-                           "ChargedPFO.eta",
+                           "ChargedPFO.detaECal",
                            "ChargedPFO.deta",
                            "ChargedPFO.pt",
                            "ChargedPFO.jetpt", ],
-            "NeutralPFO": ["NeutralPFO.phi",
+            "NeutralPFO": ["NeutralPFO.dphiECal",
                            "NeutralPFO.dphi",
-                           "NeutralPFO.eta",
+                           "NeutralPFO.detaECal",
                            "NeutralPFO.deta",
                            "NeutralPFO.pt",
                            "NeutralPFO.jetpt",
@@ -64,15 +64,15 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                            "NeutralPFO.firstEtaWRTClusterPosition_EM1",
                            "NeutralPFO.secondEtaWRTClusterPosition_EM2",
                            ],
-            "ShotPFO": ["ShotPFO.phi",
+            "ShotPFO": ["ShotPFO.dphiECal",
                         "ShotPFO.dphi",
-                        "ShotPFO.eta",
+                        "ShotPFO.detaECal",
                         "ShotPFO.deta",
                         "ShotPFO.pt",
                         "ShotPFO.jetpt", ],
-            "ConvTrack": ["ConvTrack.phi",
+            "ConvTrack": ["ConvTrack.dphiECal",
                           "ConvTrack.dphi",
-                          "ConvTrack.eta",
+                          "ConvTrack.detaECal",
                           "ConvTrack.deta",
                           "ConvTrack.pt",
                           "ConvTrack.jetpt", ],
@@ -95,7 +95,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         # number of objects per tau
         self._dataset.n_steps = {
             "ChargedPFO": 3,
-            "NeutralPFO": 10,
+            "NeutralPFO": 8,
             "ShotPFO": 6,
             "ConvTrack": 4,
             "Label": None,

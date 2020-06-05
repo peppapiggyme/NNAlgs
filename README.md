@@ -12,7 +12,7 @@
 conda env create -f CondaEnv.yml
 ```
 
->- (updated on 27/04/2020 using)
+>- (updated on 04/06/2020 using)
 >```shell script
 >conda env export > CondaEnv.yml
 >```
