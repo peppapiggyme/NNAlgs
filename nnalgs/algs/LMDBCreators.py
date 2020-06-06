@@ -64,7 +64,7 @@ class ExampleLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
             for i in range(arr.shape[0]):
                 key = "{}-{:09d}".format(name, self._counter)
                 self._cache[key] = arr[i].copy(order='C')  # C
-                if i % 256 == 0:
+                if i % 1000 == 0:
                     self._write_cache()
                     self._logger.debug(f"       - Cache --> counter={self._counter}, i={i} is written")
                 self._counter += 1
@@ -249,17 +249,20 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
                         f"maximum number of objects {longest}, will NOT fill with zeros!!!"
                     )
                     # if still want this feature, uncomment the line below
-                    # arr = np.pad(arr, ((0, 0), (0, 0), (0, n_steps[name] - longest)))
+                    arr = np.pad(arr, ((0, 0), (0, 0), (0, self.n_steps[name] - longest)))
 
             # do some testing here if you want
             self._logger.debug(arr[:3])
+            self._logger.debug(arr.shape)
 
             # write the cache into database
             # like this {"ChargedPFO-019961013": array([1,2,3, ..., batch_size])}
             for i in range(arr.shape[0]):
+                if name != "Label" and arr[i].shape != (self.n_steps[name], len(vars)):
+                    self._logger.warning("{}-{:09d} has unexpected shape {}! This might cause crash at training time!".format(name, self._counter, arr[i].shape))
                 key = "{}-{:09d}".format(name, self._counter)
                 self._cache[key] = arr[i].copy(order='C')  # C
-                if i % 1024 == 0:
+                if i % 1000 == 0:
                     self._write_cache()
                     self._logger.debug(f"       - Cache --> counter={self._counter}, i={i} is written")
                 self._counter += 1
@@ -320,6 +323,8 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
                     elif ft.endswith(".eta"):
                         self._preproc[ft]["mean"], self._preproc[ft]["std"] = 0.0, 0.5 * 2.5000000
                     elif ft.endswith(".dphi") or ft.endswith(".deta"):
+                        self._preproc[ft]["mean"] = 0.0
+                    elif ft.endswith(".dphiECal") or ft.endswith(".detaECal"):
                         self._preproc[ft]["mean"] = 0.0
                     # no prior knowledge
                     else:
