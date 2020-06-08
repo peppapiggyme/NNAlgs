@@ -1,6 +1,6 @@
 import sys
 
-import nnexec.TrainDecayMode as trainer
+import nnexec.TrainDecayModeFit as trainer
 import nnexec.TuneDecayMode as tuner
 
 mode = sys.argv[1]
