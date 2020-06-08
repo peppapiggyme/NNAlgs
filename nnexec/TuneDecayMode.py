@@ -49,9 +49,10 @@ def tune(cfg):
     s = np.arange(0, length)
     np.random.shuffle(s)
 
+    # *** hardcoded shapes *** #
     y = list(islice(decaymode_generator(lmdb_dir, "Label", (), np.long), length))
     X_1 = list(islice(decaymode_generator(lmdb_dir, "ChargedPFO", (3, 6), np.float32), length))
-    X_2 = list(islice(decaymode_generator(lmdb_dir, "NeutralPFO", (10, 21), np.float32), length))
+    X_2 = list(islice(decaymode_generator(lmdb_dir, "NeutralPFO", (8, 21), np.float32), length))
     X_3 = list(islice(decaymode_generator(lmdb_dir, "ShotPFO", (6, 6), np.float32), length))
     X_4 = list(islice(decaymode_generator(lmdb_dir, "ConvTrack", (4, 6), np.float32), length))
 
@@ -61,7 +62,7 @@ def tune(cfg):
     y_train = y[:-split]
     X_train_1, X_train_2, X_train_3, X_train_4 = X_1[:-split], X_2[:-split], X_3[:-split], X_4[:-split]
 
-    y_valid = y[:-split]
+    y_valid = y[-split:]
     X_valid_1, X_valid_2, X_valid_3, X_valid_4 = X_1[-split:], X_2[-split:], X_3[-split:], X_4[-split:]
 
     # =====
