@@ -76,11 +76,7 @@ python NNAlgs Tune NNAlgs/config/ConfDSNN.yaml
     └── __init__.py
 ```
 
-# Current workspace
->["work-2020" on Jupyter-Lab (US), valid until 28/09/2020](https://work-2020.atlas-ml.org/)
-
 # TODOs
-- use H5Utils(+THOR) to produce training samples?
 - increase GPU usage [1]
 
 [1] [What does GPU-Util means in nvidia-smi](https://stackoverflow.com/questions/40937894/nvidia-smi-volatile-gpu-utilization-explanation/40938696)
