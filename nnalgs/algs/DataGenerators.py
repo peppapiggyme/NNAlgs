@@ -5,7 +5,7 @@ import lmdb
 import numpy as np
 from keras.utils import to_categorical
 
-from nnalgs.algs.LMDBCreators import ExampleLMDBCreator, DecayModeLMDBCreator
+from nnalgs.algs.LMDBCreators import DecayModeLMDBCreator
 from nnalgs.base.DataGenerator import BaseDataGenerator
 
 
