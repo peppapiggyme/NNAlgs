@@ -88,8 +88,8 @@ def train(cfg):
     # =======
 
     lmdb_dir = cfg['lmdb_dir']
-    length = 30000000
-    train = 24000000
+    length = 1770000
+    train = 1410000
     split = length - train
 
     s = np.arange(0, length)
@@ -115,11 +115,11 @@ def train(cfg):
     # Training
     # ========
 
-    # the parallel model
-    model_gpu = multi_gpu_model(model, gpus=cfg['gpus'])
-    model_gpu.compile(loss="categorical_crossentropy", optimizer=cfg["opt"], metrics=["categorical_accuracy"])
+    # the parallel model （ this is deprecated in tf since 2020/04 )
+    # model_gpu = multi_gpu_model(model, gpus=cfg['gpus'])
+    model.compile(loss="categorical_crossentropy", optimizer=cfg["opt"], metrics=["categorical_accuracy"])
     
-    history = model_gpu.fit(
+    history = model.fit(
         [X_train_1, X_train_2, X_train_3, X_train_4], y_train, epochs=cfg['epochs'], 
         verbose=cfg['verbose'], callbacks=callbacks,
         validation_data=([X_valid_1, X_valid_2, X_valid_3, X_valid_4], y_valid), 

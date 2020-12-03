@@ -15,11 +15,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'log_vars', 'logabs_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data/zhangb/root_v69/", "data-tree")
+        self._dataset.paths = walk_dir("/data1/bowenzhang/v74_valid1/", "test")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
-        self._dataset.length = 30000000
+        self._dataset.length = 1500000
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {
@@ -56,7 +56,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                            "NeutralPFO.ENG_FRAC_CORE",
                            "NeutralPFO.NPosECells_EM1",
                            "NeutralPFO.NPosECells_EM2",
-                           # "NeutralPFO.nHitsInEM1",  #
+                           # "NeutralPFO.NHitsInEM1",  #
                            "NeutralPFO.ptSubRatio",
                            "NeutralPFO.energyfrac_EM2",
                            "NeutralPFO.EM1CoreFrac",
@@ -79,7 +79,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
             "Label": ["TauJets.truthDecayMode"],
         }
 
-        self._dataset.sel_vars = ["TauJets.pt", "TauJets.truthPtVis", "TauJets.eta", "TauJets.truthEtaVis",
+        self._dataset.sel_vars = ["TauJets.jet_pt", "TauJets.truthPtVis", "TauJets.jet_eta", "TauJets.truthEtaVis",
                                   "TauJets.nTracks", "TauJets.truthProng", "TauJets.IsTruthMatched",
                                   "TauJets.truthDecayMode", "TauJets.mcEventNumber"]
 

@@ -42,5 +42,5 @@ def log10(arr, epsilon=0.0):
     :return: np.ndarray
     """
     masked = np.ma.masked_equal(arr, 0)
-    masked = np.log10(masked + epsilon)
+    masked = np.log10(np.maximum(masked, epsilon))
     return masked.filled(0)

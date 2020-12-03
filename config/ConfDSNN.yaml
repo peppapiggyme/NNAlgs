@@ -1,7 +1,7 @@
 DSNN:
   name: "DSNN"
-  gpus: 2
-  workers: 16
+  gpus: 1
+  workers: 4
   lmdb_dir: "NNAlgs/data/lmdb/decaymode/"
   gen: "DecayModePi0varTrainGenLoader"
   model: "ModelDSNN"

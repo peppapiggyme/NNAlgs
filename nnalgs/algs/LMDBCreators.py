@@ -7,163 +7,6 @@ from nnalgs.base.LMDBCreator import BaseLMDBCreator
 from nnalgs.utils.Math import combine_mean_std
 
 
-class ExampleLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
-    """
-    Class for decay mode classification LMDB database creators
-    """
-
-    def __init__(self, sel_vars, data, dtype, **kwargs):
-        """
-        :param sel_vars: a list of the variables for selection (e.g. TauJet variables)
-        :param data: a dict of all the inputs and outputs variables for each input branch
-        :param dtype: a dict of NumPy dtype to be stored for each input branch
-        :param kwargs: common arguments for base class
-        """
-        self.sel_vars = sel_vars
-        self.data = data
-        self.dtype = dtype
-
-        super().__init__(**kwargs)
-
-    def _loop_create_chunk(self, chunk):
-        entry_start, entry_stop = chunk
-
-        self._logger.info(f"   - Chunk here is: {entry_start} ~ {entry_stop}")
-        df_sel = self._root_tree.pandas.df(self.sel_vars, entrystart=entry_start, entrystop=entry_stop)
-        removed_indices = self._get_removed_indices(df=df_sel)
-        counter_here = self._counter
-
-        for name, vars in self.data.items():
-            self._logger.info(f"     - Branch here is: {name}")
-            self._counter = counter_here
-            df = self._root_tree.pandas.df(vars, entrystart=entry_start, entrystop=entry_stop, flatten=False)
-            # apply selection based on indices
-            df.drop(removed_indices, inplace=True)
-            df.reset_index(drop=True, inplace=True)
-
-            # use index -> deep modification
-            if name == "Label":  # speed up
-                assert len(vars) == 1
-                arr = np.asarray(df, dtype=self.dtype[name])
-                arr = arr.reshape(len(arr))
-            elif name == "Inspector":
-                arr = np.zeros((len(df), len(self.data[name])), dtype=self.dtype[name])
-                for i, var in enumerate(self.data[name]):
-                    arr[:, i] = np.asarray(df[var], dtype=self.dtype[name])
-            elif name == "TauJets":
-                arr = np.zeros((len(df), len(self.data[name])), dtype=self.dtype[name])
-                for i, var in enumerate(self.data[name]):
-                    arr[:, i] = np.asarray(df[var], dtype=self.dtype[name])
-                    arr[:, i] = self._preprocessing_decaymode(var, arr[:, i])
-            else:
-                raise ValueError(f"Invalid name {name} was used.")
-
-            # test your test here
-            self._logger.debug(arr[0])
-
-            for i in range(arr.shape[0]):
-                key = "{}-{:09d}".format(name, self._counter)
-                self._cache[key] = arr[i].copy(order='C')  # C
-                if i % 1000 == 0:
-                    self._write_cache()
-                    self._logger.debug(f"       - Cache --> counter={self._counter}, i={i} is written")
-                self._counter += 1
-
-    def _loop_preproc_chunk(self, chunk):
-        """
-        The pre-processing strategy is evaluated on full samples.
-        No selection is required (yet not implemented)
-        """
-        entry_start, entry_stop = chunk
-
-        for name, fts in self.data.items():
-
-            # Skip Label ...
-            if name == "Label":
-                continue
-
-            # loop over fts -> features of each branch
-            for ft in fts:
-                self._logger.debug(f"** {name} ** {ft} **")
-
-                array = self._root_tree.array(ft, entrystart=entry_start, entrystop=entry_stop)
-
-                # Maybe don't need to use the same dtype (-_-)
-                array.flatten().dtype = self.dtype[name]  # <- np.float32 ...
-
-                # approximation of mean and std, for the scale and offset in pre-processing
-                size_here, mean_here, std_here = entry_stop - entry_start, array.mean(), array.std()
-                if ft in self._preproc and set(self._preproc[ft].keys()) == {"size", "mean",
-                                                                             "std"}:  # The first chunk
-                    l_n = [self._preproc[ft]["size"], size_here]
-                    l_mean = [self._preproc[ft]["mean"], mean_here]
-                    l_std = [self._preproc[ft]["std"], std_here]
-                    # a useful function which can combine a list of samples
-                    size_here, mean_here, std_here = combine_mean_std(l_n, l_mean, l_std)
-                self._preproc[ft] = dict(size=size_here, mean=mean_here, std=std_here)
-
-        self._logger.debug(self._preproc, "\n")
-
-    def _save_to_json(self):
-        for name, fts in self.data.items():
-            d_fts = {'name': name, 'variables': []}
-            for ft, stat in self._preproc.items():
-                if name in ft:
-                    offset, scale = -1 * stat["mean"], 0.5 / stat["std"]
-                    d_fts['variables'].append(
-                        dict(name=ft.split('.')[-1], offset=float(offset), scale=float(scale))
-                    )
-
-            self._variables.append(d_fts)
-
-        outputs = [
-            {
-                'name': 'decay_mode',
-                'labels': ['c_1p0n', 'c_1p1n', 'c_1pXn', 'c_3p0n', 'c_3pXn']
-            }
-        ]
-        final_dict = {
-            'input_sequences': [],
-            'inputs': self._variables,
-            'outputs': outputs
-        }
-
-        # Saving
-        self._write_json(final_dict)
-
-    def _get_removed_indices(self, df):
-
-        if self.mode == 'Train' or self.mode == 'Validation':
-            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.IsTruthMatched"] != 1) |
-                                 (df["TauJets.mcEventNumber"] % 2 == 0)].index  # drop even
-
-        elif self.mode == 'Test':
-            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.IsTruthMatched"] != 1) |
-                                 (df["TauJets.mcEventNumber"] % 2 != 0)].index  # drop even
-        else:
-            raise ValueError(f"Cannot set type as {self.mode}")
-
-        return removed_indices
-
-    def _preprocessing_decaymode(self, ft, arr):
-        """
-        Pre-process array at creation time
-        :param ft: feature name
-        :param arr: numpy.ndarray
-        :return: pre-processed numpy.ndarray
-        """
-
-        preproc = self._read_json()
-
-        # NOTE: arrays here are padded with zeros (!)
-        masked = np.ma.masked_equal(arr, 0)
-
-        offset, scale = preproc[ft]["mean"], 0.5 / preproc[ft]["std"]
-        masked = np.multiply(np.subtract(masked, offset), scale)
-
-        return masked.filled(0)
-
-
 class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
     """
     Class for decay mode classification LMDB database creators
@@ -357,9 +200,9 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         :return: list of indices
         """
         if self.mode == 'Train' or self.mode == 'Validation':
-            removed_indices = df[df["TauJets.mcEventNumber"] % 2 == 0].index  # drop even (x)
+            removed_indices = df[(df["TauJets.truthDecayMode"] > 4)].index  # drop even (x)
         elif self.mode == 'Test':
-            removed_indices = df[df["TauJets.mcEventNumber"] % 2 != 0].index  # drop odd  (x)
+            removed_indices = df[(df["TauJets.truthDecayMode"] > 4)].index  # drop odd  (x)
         else:
             raise ValueError(f"Cannot set type as {self.mode}")
 
@@ -389,10 +232,10 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         """check log and logabs transformation"""
 
         if ft in self.log_vars.keys():
-            arr = np.log10(np.add(arr, self.log_vars[ft]))
+            arr = np.log10(np.maximum(arr, self.log_vars[ft]))
             ft = ''.join((ft, '_log'))
         elif ft in self.logabs_vars.keys():
-            arr = np.log10(np.add(np.abs(arr), self.logabs_vars[ft]))
+            arr = np.log10(np.maximum(np.abs(arr), self.logabs_vars[ft]))
             ft = ''.join((ft, '_logabs'))
 
         return ft, arr
