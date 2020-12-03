@@ -86,12 +86,12 @@ def train(cfg):
     # ========
 
     # the parallel model
-    model_gpu = multi_gpu_model(model, gpus=cfg['gpus'])
-    model_gpu.compile(loss="categorical_crossentropy", optimizer=cfg["opt"], metrics=["categorical_accuracy"])
+    # model_gpu = multi_gpu_model(model, gpus=cfg['gpus'])
+    model.compile(loss="categorical_crossentropy", optimizer=cfg["opt"], metrics=["categorical_accuracy"])
 
-    history = model_gpu.fit(training_generator, epochs=cfg['epochs'], verbose=cfg['verbose'], callbacks=callbacks,
-                            validation_data=validation_generator,
-                            max_queue_size=10, workers=cfg['workers'], use_multiprocessing=True)
+    history = model.fit(training_generator, epochs=cfg['epochs'], verbose=cfg['verbose'], callbacks=callbacks,
+                        validation_data=validation_generator,
+                        max_queue_size=4, workers=cfg['workers'], use_multiprocessing=False)
 
     val_loss, epoch = min(zip(history.history["val_loss"], history.epoch))
     val_acc,  epoch = max(zip(history.history["val_categorical_accuracy"], history.epoch))

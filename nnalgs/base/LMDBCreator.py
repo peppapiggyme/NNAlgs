@@ -27,6 +27,8 @@ class BaseLMDBCreator(object):
         self.obj_name = obj_name
         self.tree_name = tree_name
         self.lmdb_dir = lmdb_dir
+        pathlib.Path(self.lmdb_dir).mkdir(parents=True, exist_ok=True)
+        self.store_dir = os.path.join(self.lmdb_dir, mode)
         self.json_dir = json_dir
         self.mode = mode
 
@@ -92,7 +94,7 @@ class BaseLMDBCreator(object):
     # LMDB creation
     def _create_env(self):
         try:
-            return lmdb.open(self.lmdb_dir, map_size=1024 ** 4, create=True)
+            return lmdb.open(self.store_dir, map_size=1024 ** 4, create=True)
         except Exception as e:
             self._logger.error(f"Failed to create LMDB environment: {e!r}")
             return None
@@ -187,12 +189,14 @@ class BaseLMDBCreator(object):
 
     # interface
     def execute(self):
+        # TODO: check if the preprocessing is needed to be done for validation also
+        # if always run the generation of training sample, then may not
         if self.mode == "Train":
             self._logger.info(r">>> Pre-processing ...")
             self._execute_preproc()
             self._logger.info(f">>> Saving JSON file to {self.json_dir}...")
             self._save_to_json()
-        self._logger.info(f">>> Creating LMDB database in {self.lmdb_dir} ...")
+        self._logger.info(f">>> Creating LMDB database in {self.store_dir} ...")
         self._execute_create()
 
     # extent closing

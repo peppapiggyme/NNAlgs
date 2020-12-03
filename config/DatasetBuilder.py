@@ -15,11 +15,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'log_vars', 'logabs_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data1/bowenzhang/v74_valid1/", "test")
+        self._dataset.paths = walk_dir("/data1/bowenzhang/v74_valid1/", "FlatTree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
-        self._dataset.length = 1500000
+        self._dataset.length = 1770000
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {

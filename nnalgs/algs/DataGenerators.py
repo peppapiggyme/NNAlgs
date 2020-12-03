@@ -5,7 +5,7 @@ import lmdb
 import numpy as np
 from keras.utils import to_categorical
 
-from nnalgs.algs.LMDBCreators import ExampleLMDBCreator, DecayModeLMDBCreator
+from nnalgs.algs.LMDBCreators import DecayModeLMDBCreator
 from nnalgs.base.DataGenerator import BaseDataGenerator
 
 
@@ -18,16 +18,10 @@ class DecayModeDataGenerator(BaseDataGenerator):
         :param length:
         :param mode: to avoid name collision with the mode in dataset builder
         """
-        self.length = length
+        ## HC length!
+        self.length = int(length*0.8) if mode == "Train" else int(length*0.2)
         self.mode = mode
-
-        # Hardcoded train validation split ... -> 20% for validation
-        if self.mode == "Train":
-            self.list_idx = [n for n in range(self.length) if n % 5 != 1]
-        elif self.mode == "Validation":
-            self.list_idx = [n for n in range(self.length) if n % 5 == 1]
-        else:
-            raise ValueError(f"Invalid mode {self.mode}, choose from 'Train' and 'Validation'")
+        self.list_idx = [n for n in range(self.length)]
 
         super().__init__()
 
@@ -74,9 +68,10 @@ class DecayModeDataGenerator(BaseDataGenerator):
         :param kwargs: see `DatasetBuilder`
         :return:
         """
-
-        if not os.path.exists(self.lmdb_dir):
-            print(f"Creating database in {self.lmdb_dir} ...")
+        
+        self.store_dir = os.path.join(self.lmdb_dir, self.mode)
+        if not os.path.exists(self.store_dir):
+            print(f"Creating database in {self.store_dir} ...")
             with closing(
                     DecayModeLMDBCreator(
                         self.sel_vars, self.data, self.n_steps, self.dtype,
@@ -85,10 +80,10 @@ class DecayModeDataGenerator(BaseDataGenerator):
             ) as lmdb_creator:
                 lmdb_creator.execute()
         else:
-            print(f"Database already exists in {self.lmdb_dir}, will not recreate ...")
+            print(f"Database already exists in {self.store_dir}, will not recreate ...")
 
         # reference: https://lmdb.readthedocs.io/en/release/#lmdb.Environment
-        self._env = lmdb.open(self.lmdb_dir, readonly=True, readahead=False, meminit=False)
+        self._env = lmdb.open(self.store_dir, readonly=True, readahead=False, meminit=False)
         self._txn = self._env.begin(write=False)
 
         return None

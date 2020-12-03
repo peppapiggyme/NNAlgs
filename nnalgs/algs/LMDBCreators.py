@@ -199,10 +199,12 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         :param df: pandas.DataFrame
         :return: list of indices
         """
-        if self.mode == 'Train' or self.mode == 'Validation':
-            removed_indices = df[(df["TauJets.truthDecayMode"] > 4)].index  # drop even (x)
+        if self.mode == 'Train':
+            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 == 0)].index  # 4/5 of all
+        elif self.mode == 'Validation':
+            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 != 0)].index  # 1/5 of all
         elif self.mode == 'Test':
-            removed_indices = df[(df["TauJets.truthDecayMode"] > 4)].index  # drop odd  (x)
+            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 != 0)].index  # not used
         else:
             raise ValueError(f"Cannot set type as {self.mode}")
 
