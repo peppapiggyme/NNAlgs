@@ -3,7 +3,7 @@ DSNN:
   gpus: 1
   workers: 4
   lmdb_dir: "NNAlgs/data/lmdb/decaymode/"
-  gen: "DecayModePi0varTrainGenLoader"
+  gen: "DecayModePi0varGenLoader"
   model: "ModelDSNN"
   arch: "NNAlgs/config/ArchDSNN.yaml"
   epochs: 100

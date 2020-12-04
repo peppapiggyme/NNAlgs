@@ -7,23 +7,25 @@ from keras.utils import to_categorical
 
 from nnalgs.algs.LMDBCreators import DecayModeLMDBCreator
 from nnalgs.base.DataGenerator import BaseDataGenerator
+from nnalgs.utils.Enum import N_CLASS_DECAYMODE
 
 
 class DecayModeDataGenerator(BaseDataGenerator):
     """Decay mode keras data generator"""
 
-    def __init__(self, length, mode):
+    def __init__(self, length, mode, split, batch_size):
         """
         Docstring ...
         :param length:
         :param mode: to avoid name collision with the mode in dataset builder
+        :param split: how many train vs validation vs test, i.e. (0.8, 0.1, 0.1)
         """
         ## HC length!
-        self.length = int(length*0.8) if mode == "Train" else int(length*0.2)
+        self.length = int(split[mode] * length)
         self.mode = mode
         self.list_idx = [n for n in range(self.length)]
 
-        super().__init__()
+        super().__init__(batch_size=batch_size[mode], to_fit=True, n_classes=N_CLASS_DECAYMODE, shuffle=True)
 
     def _generate_input(self, list_idx_temp):
         """DocString"""

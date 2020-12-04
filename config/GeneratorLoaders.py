@@ -1,9 +1,9 @@
 from config.DatasetBuilder import DecayModePi0varBuilder
 from nnalgs.base.GeneratorLoader import BaseGenLoader
-from nnalgs.base.IDataset import Director
+from nnalgs.base.DatasetBuilder import Director
 
 
-class DecayModePi0varTrainGenLoader(BaseGenLoader):
+class DecayModePi0varGenLoader(BaseGenLoader):
     """
     Gammatautau ntuple loading - pi0 BDT vars
     """

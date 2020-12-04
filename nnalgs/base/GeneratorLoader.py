@@ -4,6 +4,6 @@ class BaseGenLoader(object):
 
     def generators(self):
         """
-        :return: (TrainGen, ValidGen)
+        :return: (TrainGen, ValidGen， TestGen)
         """
-        return tuple((None, None))
+        return tuple((None, None, None))

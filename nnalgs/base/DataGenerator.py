@@ -6,8 +6,7 @@ from keras.utils import Sequence
 class BaseDataGenerator(Sequence):
     """Keras data generator"""
 
-    def __init__(self, batch_size=500, to_fit=True, n_classes=5,
-                 shuffle=True):
+    def __init__(self, batch_size, to_fit, n_classes, shuffle):
         """
         Documentation
         :param batch_size:

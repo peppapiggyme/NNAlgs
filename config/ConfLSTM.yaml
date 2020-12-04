@@ -1,9 +1,9 @@
 LSTM:
   name: "LSTM"
-  gpus: 4
-  workers: 24
+  gpus: 1
+  workers: 4
   lmdb_dir: "NNAlgs/data/lmdb/decaymode/"
-  gen: "DecayModePi0varTrainGenLoader"
+  gen: "DecayModePi0varGenLoader"
   model: "ModelLSTM"
   arch: "NNAlgs/config/ArchLSTM.yaml"
   epochs: 100

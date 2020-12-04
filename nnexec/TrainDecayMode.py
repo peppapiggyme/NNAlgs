@@ -93,7 +93,7 @@ def train(cfg):
                         validation_data=validation_generator,
                         max_queue_size=4, workers=cfg['workers'], use_multiprocessing=False)
 
-    val_loss, epoch = min(zip(history.history["val_loss"], history.epoch))
-    val_acc,  epoch = max(zip(history.history["val_categorical_accuracy"], history.epoch))
-    logger.info(f"\nMinimum val_loss {val_loss} at epoch {epoch + 1}\n")
-    logger.info(f"\nMaximum val_categorical_accuracy {val_acc} at epoch {epoch + 1}\n")
+    val_loss, epoch_min_loss = min(zip(history.history["val_loss"], history.epoch))
+    val_acc,  epoch_max_acc  = max(zip(history.history["val_categorical_accuracy"], history.epoch))
+    logger.info(f"\nMinimum val_loss {val_loss} at epoch {epoch_min_loss + 1}\n")
+    logger.info(f"\nMaximum val_categorical_accuracy {val_acc} at epoch {epoch_max_acc + 1}\n")

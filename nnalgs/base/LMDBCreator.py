@@ -28,9 +28,9 @@ class BaseLMDBCreator(object):
         self.tree_name = tree_name
         self.lmdb_dir = lmdb_dir
         pathlib.Path(self.lmdb_dir).mkdir(parents=True, exist_ok=True)
-        self.store_dir = os.path.join(self.lmdb_dir, mode)
         self.json_dir = json_dir
         self.mode = mode
+        self.store_dir = os.path.join(self.lmdb_dir, self.mode)
 
         # hash table cache
         self._cache = {}

@@ -9,10 +9,9 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
     def build_metadata(self, mode):
 
         # Copy from self to Dataset object
-        self._dataset.copyable = ['paths', 'tree_name', 'lmdb_dir', 'json_dir',
-                                  'length', 'mode', 'lmdb_kwargs',
-                                  'data', 'sel_vars', 'dtype', 'n_steps',
-                                  'log_vars', 'logabs_vars', 'branch', 'shape']
+        self._dataset.copyable = ['paths', 'tree_name', 'lmdb_dir', 'json_dir', 'length', 
+                                  'mode', 'split', 'lmdb_kwargs', 'data', 'sel_vars', 'dtype', 
+                                  'n_steps', 'log_vars', 'logabs_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
         self._dataset.paths = walk_dir("/data1/bowenzhang/v74_valid1/", "FlatTree")
@@ -20,6 +19,10 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
         self._dataset.length = 1770000
+        # this must be consistent with the LMDB creation !
+        # see: nnalgs/algs/LMDBCreators -> _get_removed_indices
+        self._dataset.split = {"Train": 0.8, "Validation": 0.2, "Test": 0.0}
+        self._dataset.batch_size = {"Train": 200, "Validation": 1000, "Test": 1000}
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {
@@ -79,9 +82,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
             "Label": ["TauJets.truthDecayMode"],
         }
 
-        self._dataset.sel_vars = ["TauJets.jet_pt", "TauJets.truthPtVis", "TauJets.jet_eta", "TauJets.truthEtaVis",
-                                  "TauJets.nTracks", "TauJets.truthProng", "TauJets.IsTruthMatched",
-                                  "TauJets.truthDecayMode", "TauJets.mcEventNumber"]
+        self._dataset.sel_vars = ["TauJets.truthDecayMode", "TauJets.mcEventNumber"]
 
         # don't modify this
         self._dataset.dtype = {

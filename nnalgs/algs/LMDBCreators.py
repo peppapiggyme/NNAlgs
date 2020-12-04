@@ -198,6 +198,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         The performance is not as bad as i looks like...
         :param df: pandas.DataFrame
         :return: list of indices
+        For cross validation, one can change the remainer = 0, 1, 2, 3, 5 (5-fold)
         """
         if self.mode == 'Train':
             removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 == 0)].index  # 4/5 of all
