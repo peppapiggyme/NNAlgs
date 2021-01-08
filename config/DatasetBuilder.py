@@ -11,10 +11,10 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         # Copy from self to Dataset object
         self._dataset.copyable = ['paths', 'tree_name', 'lmdb_dir', 'json_dir', 'length', 
                                   'mode', 'split', 'lmdb_kwargs', 'data', 'sel_vars', 'dtype', 
-                                  'n_steps', 'log_vars', 'logabs_vars', 'branch', 'shape']
+                                  'n_steps', 'log_vars', 'atan_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data1/bowenzhang/v74_valid1/", "FlatTree")
+        self._dataset.paths = walk_dir("/data1/bowenzhang/v78_valid1/LCTopo_r12158/", "tree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
@@ -37,12 +37,16 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
     def build_vars(self):
         # add new variables to branch here
         self._dataset.data = {
-            "ChargedPFO": ["ChargedPFO.dphiECal",
-                           "ChargedPFO.dphi",
-                           "ChargedPFO.detaECal",
-                           "ChargedPFO.deta",
-                           "ChargedPFO.pt",
-                           "ChargedPFO.jetpt", ],
+            "TauTrack": ["TauTrack.dphiECal",
+                         "TauTrack.dphi",
+                         "TauTrack.detaECal",
+                         "TauTrack.deta",
+                         "TauTrack.pt",
+                         "TauTrack.jetpt", 
+                         "TauTrack.d0TJVA",
+                         "TauTrack.d0SigTJVA",
+                         "TauTrack.z0sinthetaTJVA",
+                         "TauTrack.z0sinthetaSigTJVA", ],
             "NeutralPFO": ["NeutralPFO.dphiECal",
                            "NeutralPFO.dphi",
                            "NeutralPFO.detaECal",
@@ -60,11 +64,14 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                            "NeutralPFO.NPosECells_EM1",
                            "NeutralPFO.NPosECells_EM2",
                            # "NeutralPFO.NHitsInEM1",  #
-                           "NeutralPFO.ptSubRatio",
-                           "NeutralPFO.energyfrac_EM2",
+                           # "NeutralPFO.ptSubRatio",  #
+                           # "NeutralPFO.energyfrac_EM2",  #
+                           "NeutralPFO.energy_EM1",
+                           "NeutralPFO.energy_EM2",
                            "NeutralPFO.EM1CoreFrac",
-                           "NeutralPFO.secondEtaWRTClusterPosition_EM1",
                            "NeutralPFO.firstEtaWRTClusterPosition_EM1",
+                           "NeutralPFO.firstEtaWRTClusterPosition_EM2",
+                           "NeutralPFO.secondEtaWRTClusterPosition_EM1",
                            "NeutralPFO.secondEtaWRTClusterPosition_EM2",
                            ],
             "ShotPFO": ["ShotPFO.dphiECal",
@@ -78,7 +85,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                           "ConvTrack.detaECal",
                           "ConvTrack.deta",
                           "ConvTrack.pt",
-                          "ConvTrack.jetpt", ],
+                          "ConvTrack.jetpt", 
+                          "ConvTrack.d0TJVA",
+                          "ConvTrack.d0SigTJVA",
+                          "ConvTrack.z0sinthetaTJVA",
+                          "ConvTrack.z0sinthetaSigTJVA", ],
             "Label": ["TauJets.truthDecayMode"],
         }
 
@@ -86,7 +97,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
 
         # don't modify this
         self._dataset.dtype = {
-            "ChargedPFO": np.float32,
+            "TauTrack": np.float32,
             "NeutralPFO": np.float32,
             "ShotPFO": np.float32,
             "ConvTrack": np.float32,
@@ -95,7 +106,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
 
         # number of objects per tau
         self._dataset.n_steps = {
-            "ChargedPFO": 3,
+            "TauTrack": 3,
             "NeutralPFO": 8,
             "ShotPFO": 6,
             "ConvTrack": 4,
@@ -103,8 +114,8 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         }
 
         self._dataset.log_vars = {
-            "ChargedPFO.pt": 1e-3,
-            "ChargedPFO.jetpt": 1e-3,
+            "TauTrack.pt": 1e-3,
+            "TauTrack.jetpt": 1e-3,
             "NeutralPFO.pt": 1e-3,
             "NeutralPFO.jetpt": 1e-3,
             "NeutralPFO.SECOND_R": 1e-3,
@@ -117,12 +128,22 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
             "ConvTrack.pt": 1e-3,
             "ConvTrack.jetpt": 1e-3,
         }
-
-        self._dataset.logabs_vars = {
-            "NeutralPFO.ptSubRatio": 1e-6,
+        
+        self._dataset.atan_vars = {
+            "NeutralPFO.ptSubRatio", 
+#             "NeutralPFO.firstEtaWRTClusterPosition_EM1",
+#             "NeutralPFO.firstEtaWRTClusterPosition_EM2",
+#             "TauTrack.d0TJVA",
+#             "TauTrack.d0SigTJVA",
+#             "TauTrack.z0sinthetaTJVA",
+#             "TauTrack.z0sinthetaSigTJVA", 
+#             "ConvTrack.d0TJVA",
+#             "ConvTrack.d0SigTJVA",
+#             "ConvTrack.z0sinthetaTJVA",
+#             "ConvTrack.z0sinthetaSigTJVA", 
         }
 
-        self._dataset.branch = ["ChargedPFO", "NeutralPFO", "ShotPFO", "ConvTrack", "Label"]
+        self._dataset.branch = ["TauTrack", "NeutralPFO", "ShotPFO", "ConvTrack", "Label"]
 
         self._dataset.shape = dict()
         for name in self._dataset.branch:

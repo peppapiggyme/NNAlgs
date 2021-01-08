@@ -77,7 +77,7 @@ class DecayModeDataGenerator(BaseDataGenerator):
             with closing(
                     DecayModeLMDBCreator(
                         self.sel_vars, self.data, self.n_steps, self.dtype,
-                        self.log_vars, self.logabs_vars, **kwargs
+                        self.log_vars, self.atan_vars, **kwargs
                     )
             ) as lmdb_creator:
                 lmdb_creator.execute()

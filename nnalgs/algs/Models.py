@@ -83,14 +83,14 @@ def ModelDSNN(config_file, mask_value=0.0):
     bn = True if para["batch_norm"] == 1 else False
 
     # Branch 1
-    x_1 = Input(shape=(para["n_steps"]["ChargedPFO"], para["n_features"]["ChargedPFO"]))
+    x_1 = Input(shape=(para["n_steps"]["TauTrack"], para["n_features"]["TauTrack"]))
     b_1 = Masking(mask_value=mask_value)(x_1)
-    for x in range(para["n_tdd"]["ChargedPFO"]):
-        b_1 = TimeDistributed(Dense(para["n_inputs"]["ChargedPFO"][x]))(b_1)
+    for x in range(para["n_tdd"]["TauTrack"]):
+        b_1 = TimeDistributed(Dense(para["n_inputs"]["TauTrack"][x]))(b_1)
         b_1 = Activation("relu")(b_1)
     b_1 = Sum()(b_1)
-    for x in range(para["n_h"]["ChargedPFO"]):
-        b_1 = Dense(para["n_hiddens"]["ChargedPFO"][x])(b_1)
+    for x in range(para["n_h"]["TauTrack"]):
+        b_1 = Dense(para["n_hiddens"]["TauTrack"][x])(b_1)
         b_1 = Activation("relu")(b_1)
     if bn:
         b_1 = BatchNormalization()(b_1)
@@ -155,13 +155,13 @@ def ModelLSTM(config_file, mask_value=0.0, unroll=True):
     bi_lstm = True if para["bidirectional"] == 1 else False
 
     # Branch 1
-    x_1 = Input(shape=(para["n_steps"]["ChargedPFO"], para["n_features"]["ChargedPFO"]))
+    x_1 = Input(shape=(para["n_steps"]["TauTrack"], para["n_features"]["TauTrack"]))
     mask_1 = Masking(mask_value=mask_value)(x_1)
-    lstm_1 = TimeDistributed(Dense(para["n_inputs"]["ChargedPFO"], activation="relu"))(mask_1)
-    for i in range(para["n_layers"]["ChargedPFO"]):
-        seq = True if i < (para["n_layers"]["ChargedPFO"] - 1) else False
+    lstm_1 = TimeDistributed(Dense(para["n_inputs"]["TauTrack"], activation="relu"))(mask_1)
+    for i in range(para["n_layers"]["TauTrack"]):
+        seq = True if i < (para["n_layers"]["TauTrack"] - 1) else False
 
-        lstm_here = LSTM(para["n_hiddens"]["ChargedPFO"], return_sequences=seq,
+        lstm_here = LSTM(para["n_hiddens"]["TauTrack"], return_sequences=seq,
                          unroll=unroll, go_backwards=go_backwards)
         if bi_lstm:
             lstm_1 = Bidirectional(lstm_here)(lstm_1)

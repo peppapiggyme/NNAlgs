@@ -12,7 +12,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
     Class for decay mode classification LMDB database creators
     """
 
-    def __init__(self, sel_vars, data, n_steps, dtype, log_vars, logabs_vars, **kwargs):
+    def __init__(self, sel_vars, data, n_steps, dtype, log_vars, atan_vars, **kwargs):
         """
         :param sel_vars: a list of the variables for selection (e.g. TauJet variables)
         :param data: a dict of all the inputs and outputs variables for each input branch
@@ -26,7 +26,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         self.n_steps = n_steps
         self.dtype = dtype
         self.log_vars = log_vars
-        self.logabs_vars = logabs_vars
+        self.atan_vars = atan_vars
 
         super().__init__(**kwargs)
 
@@ -34,7 +34,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         entry_start, entry_stop = chunk
 
         # do selection (train, test split based on mc event number, 2020/03/24 -> full set training)
-        self._logger.info(f"   - Chunk here is: {entry_start} ~ {entry_stop}")
+        self._logger.debug(f"   - Chunk here is: {entry_start} ~ {entry_stop}")
         df_sel = self._root_tree.pandas.df(self.sel_vars, entrystart=entry_start, entrystop=entry_stop)
 
         # 2020/03/24 -> nothing
@@ -43,7 +43,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
 
         # loop over each branch: Label, PFOs, Track, ...
         for name, vars in self.data.items():
-            self._logger.info(f"     - Branch here is: {name}")
+            self._logger.debug(f"     - Branch here is: {name}")
 
             # Overall counter! Till the end!
             self._counter = counter_here
@@ -99,7 +99,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
             self._logger.debug(arr.shape)
 
             # write the cache into database
-            # like this {"ChargedPFO-019961013": array([1,2,3, ..., batch_size])}
+            # like this {"NeutralPFO-019961013": array([1,2,3, ..., batch_size])}
             for i in range(arr.shape[0]):
                 if name != "Label" and arr[i].shape != (self.n_steps[name], len(vars)):
                     self._logger.warning("{}-{:09d} has unexpected shape {}! This might cause crash at training time!".format(name, self._counter, arr[i].shape))
@@ -132,8 +132,8 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
                 # now point array to the flatten NumPy array
                 array: np.ndarray = array.flatten()
 
-                # check log and logabs transformation
-                ft, array = self._log_abs_trans(ft, array)
+                # check log and ATan transformation
+                ft, array = self._atan_tans(ft, array)
 
                 # Maybe don't need to use the same dtype (-_-)
                 array.flatten().dtype = self.dtype[name]  # <- np.float32 ...
@@ -224,21 +224,21 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         masked = np.ma.masked_equal(arr, 0)
 
         # Naming is consistent with those in self._preproc
-        ft, masked = self._log_abs_trans(ft, masked)
+        ft, masked = self._atan_tans(ft, masked)
 
         offset, scale = preproc[ft]["mean"], 0.5 / preproc[ft]["std"]
         masked = np.multiply(np.subtract(masked, offset), scale)
 
         return masked.filled(0)
 
-    def _log_abs_trans(self, ft, arr):
-        """check log and logabs transformation"""
+    def _atan_tans(self, ft, arr):
+        """check log and atan transformation"""
 
         if ft in self.log_vars.keys():
             arr = np.log10(np.maximum(arr, self.log_vars[ft]))
             ft = ''.join((ft, '_log'))
-        elif ft in self.logabs_vars.keys():
-            arr = np.log10(np.maximum(np.abs(arr), self.logabs_vars[ft]))
-            ft = ''.join((ft, '_logabs'))
+        elif ft in self.atan_vars:
+            arr = np.arctan(arr)
+            ft = ''.join((ft, '_atan'))
 
         return ft, arr
