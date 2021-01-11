@@ -14,15 +14,15 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'n_steps', 'log_vars', 'atan_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data1/bowenzhang/v78_valid1/LCTopo_r12158/", "tree")
+        self._dataset.paths = walk_dir("/data1/bowenzhang/r22-00/", "tree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
-        self._dataset.length = 1770000
+        self._dataset.length = 13510000
         # this must be consistent with the LMDB creation !
         # see: nnalgs/algs/LMDBCreators -> _get_removed_indices
-        self._dataset.split = {"Train": 0.8, "Validation": 0.2, "Test": 0.0}
-        self._dataset.batch_size = {"Train": 200, "Validation": 1000, "Test": 1000}
+        self._dataset.split = {"Train": 0.6, "Validation": 0.2, "Test": 0.2}
+        self._dataset.batch_size = {"Train": 200, "Validation": 500000, "Test": 500000}
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {
@@ -43,10 +43,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                          "TauTrack.deta",
                          "TauTrack.pt",
                          "TauTrack.jetpt", 
-                         "TauTrack.d0TJVA",
-                         "TauTrack.d0SigTJVA",
-                         "TauTrack.z0sinthetaTJVA",
-                         "TauTrack.z0sinthetaSigTJVA", ],
+                         #"TauTrack.d0TJVA",
+                         #"TauTrack.d0SigTJVA",
+                         #"TauTrack.z0sinthetaTJVA",
+                         #"TauTrack.z0sinthetaSigTJVA", 
+                        ],
             "NeutralPFO": ["NeutralPFO.dphiECal",
                            "NeutralPFO.dphi",
                            "NeutralPFO.detaECal",
@@ -64,13 +65,13 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                            "NeutralPFO.NPosECells_EM1",
                            "NeutralPFO.NPosECells_EM2",
                            # "NeutralPFO.NHitsInEM1",  #
-                           # "NeutralPFO.ptSubRatio",  #
-                           # "NeutralPFO.energyfrac_EM2",  #
-                           "NeutralPFO.energy_EM1",
-                           "NeutralPFO.energy_EM2",
+                           "NeutralPFO.ptSubRatio",  #
+                           "NeutralPFO.energyfrac_EM2",  #
+                           #"NeutralPFO.energy_EM1",
+                           #"NeutralPFO.energy_EM2",
                            "NeutralPFO.EM1CoreFrac",
                            "NeutralPFO.firstEtaWRTClusterPosition_EM1",
-                           "NeutralPFO.firstEtaWRTClusterPosition_EM2",
+                           #"NeutralPFO.firstEtaWRTClusterPosition_EM2",
                            "NeutralPFO.secondEtaWRTClusterPosition_EM1",
                            "NeutralPFO.secondEtaWRTClusterPosition_EM2",
                            ],
@@ -86,10 +87,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                           "ConvTrack.deta",
                           "ConvTrack.pt",
                           "ConvTrack.jetpt", 
-                          "ConvTrack.d0TJVA",
-                          "ConvTrack.d0SigTJVA",
-                          "ConvTrack.z0sinthetaTJVA",
-                          "ConvTrack.z0sinthetaSigTJVA", ],
+                          #"ConvTrack.d0TJVA",
+                          #"ConvTrack.d0SigTJVA",
+                          #"ConvTrack.z0sinthetaTJVA",
+                          #"ConvTrack.z0sinthetaSigTJVA", 
+                         ],
             "Label": ["TauJets.truthDecayMode"],
         }
 

@@ -201,11 +201,11 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         For cross validation, one can change the remainer = 0, 1, 2, 3, 5 (5-fold)
         """
         if self.mode == 'Train':
-            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 == 0)].index  # 4/5 of all
+            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 == 0)  | (df["TauJets.mcEventNumber"] % 5 == 1)].index  # 3/5 of all
         elif self.mode == 'Validation':
             removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 != 0)].index  # 1/5 of all
         elif self.mode == 'Test':
-            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 != 0)].index  # not used
+            removed_indices = df[(df["TauJets.truthDecayMode"] > 4) | (df["TauJets.mcEventNumber"] % 5 != 1)].index  # 1/5 of all, for plotting in Loki
         else:
             raise ValueError(f"Cannot set type as {self.mode}")
 
