@@ -14,7 +14,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'n_steps', 'log_vars', 'atan_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data1/bowenzhang/r22-00/", "tree")
+        self._dataset.paths = walk_dir("/data/zhangb/r22-00/", "tree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
@@ -43,10 +43,10 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                          "TauTrack.deta",
                          "TauTrack.pt",
                          "TauTrack.jetpt", 
-                         #"TauTrack.d0TJVA",
-                         #"TauTrack.d0SigTJVA",
-                         #"TauTrack.z0sinthetaTJVA",
-                         #"TauTrack.z0sinthetaSigTJVA", 
+                         "TauTrack.d0TJVA",
+                         "TauTrack.d0SigTJVA",
+                         "TauTrack.z0sinthetaTJVA",
+                         "TauTrack.z0sinthetaSigTJVA", 
                         ],
             "NeutralPFO": ["NeutralPFO.dphiECal",
                            "NeutralPFO.dphi",
@@ -65,13 +65,13 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                            "NeutralPFO.NPosECells_EM1",
                            "NeutralPFO.NPosECells_EM2",
                            # "NeutralPFO.NHitsInEM1",  #
-                           "NeutralPFO.ptSubRatio",  #
-                           "NeutralPFO.energyfrac_EM2",  #
-                           #"NeutralPFO.energy_EM1",
-                           #"NeutralPFO.energy_EM2",
+                           #"NeutralPFO.ptSubRatio",  #
+                           #"NeutralPFO.energyfrac_EM2",  #
+                           "NeutralPFO.energy_EM1",
+                           "NeutralPFO.energy_EM2",
                            "NeutralPFO.EM1CoreFrac",
                            "NeutralPFO.firstEtaWRTClusterPosition_EM1",
-                           #"NeutralPFO.firstEtaWRTClusterPosition_EM2",
+                           "NeutralPFO.firstEtaWRTClusterPosition_EM2",
                            "NeutralPFO.secondEtaWRTClusterPosition_EM1",
                            "NeutralPFO.secondEtaWRTClusterPosition_EM2",
                            ],
@@ -87,10 +87,10 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                           "ConvTrack.deta",
                           "ConvTrack.pt",
                           "ConvTrack.jetpt", 
-                          #"ConvTrack.d0TJVA",
-                          #"ConvTrack.d0SigTJVA",
-                          #"ConvTrack.z0sinthetaTJVA",
-                          #"ConvTrack.z0sinthetaSigTJVA", 
+                          "ConvTrack.d0TJVA",
+                          "ConvTrack.d0SigTJVA",
+                          "ConvTrack.z0sinthetaTJVA",
+                          "ConvTrack.z0sinthetaSigTJVA", 
                          ],
             "Label": ["TauJets.truthDecayMode"],
         }

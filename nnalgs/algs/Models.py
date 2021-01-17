@@ -1,7 +1,7 @@
 import yaml
 from keras import backend as kbe
 from keras.layers import Input, Dense, LSTM, Masking, TimeDistributed, Concatenate, Bidirectional
-from keras.layers import Layer, Activation, BatchNormalization
+from keras.layers import Layer, Activation, BatchNormalization, LeakyReLU, Dropout
 from keras.models import Model
 from tensorflow.keras import layers as tfk_layers
 # for keras tuner
@@ -87,11 +87,11 @@ def ModelDSNN(config_file, mask_value=0.0):
     b_1 = Masking(mask_value=mask_value)(x_1)
     for x in range(para["n_tdd"]["TauTrack"]):
         b_1 = TimeDistributed(Dense(para["n_inputs"]["TauTrack"][x]))(b_1)
-        b_1 = Activation("relu")(b_1)
+        b_1 = LeakyReLU(alpha=para["alpha"])(b_1)
     b_1 = Sum()(b_1)
     for x in range(para["n_h"]["TauTrack"]):
         b_1 = Dense(para["n_hiddens"]["TauTrack"][x])(b_1)
-        b_1 = Activation("relu")(b_1)
+        b_1 = LeakyReLU(alpha=para["alpha"])(b_1)
     if bn:
         b_1 = BatchNormalization()(b_1)
 
@@ -100,11 +100,11 @@ def ModelDSNN(config_file, mask_value=0.0):
     b_2 = Masking(mask_value=mask_value)(x_2)
     for x in range(para["n_tdd"]["NeutralPFO"]):
         b_2 = TimeDistributed(Dense(para["n_inputs"]["NeutralPFO"][x]))(b_2)
-        b_2 = Activation("relu")(b_2)
+        b_2 = LeakyReLU(alpha=para["alpha"])(b_2)
     b_2 = Sum()(b_2)
     for x in range(para["n_h"]["NeutralPFO"]):
         b_2 = Dense(para["n_hiddens"]["NeutralPFO"][x])(b_2)
-        b_2 = Activation("relu")(b_2)
+        b_2 = LeakyReLU(alpha=para["alpha"])(b_2)
     if bn:
         b_2 = BatchNormalization()(b_2)
 
@@ -113,11 +113,11 @@ def ModelDSNN(config_file, mask_value=0.0):
     b_3 = Masking(mask_value=mask_value)(x_3)
     for x in range(para["n_tdd"]["ShotPFO"]):
         b_3 = TimeDistributed(Dense(para["n_inputs"]["ShotPFO"][x]))(b_3)
-        b_3 = Activation("relu")(b_3)
+        b_3 = LeakyReLU(alpha=para["alpha"])(b_3)
     b_3 = Sum()(b_3)
     for x in range(para["n_h"]["ShotPFO"]):
         b_3 = Dense(para["n_hiddens"]["ShotPFO"][x])(b_3)
-        b_3 = Activation("relu")(b_3)
+        b_3 = LeakyReLU(alpha=para["alpha"])(b_3)
     if bn:
         b_3 = BatchNormalization()(b_3)
 
@@ -126,20 +126,22 @@ def ModelDSNN(config_file, mask_value=0.0):
     b_4 = Masking(mask_value=mask_value)(x_4)
     for x in range(para["n_tdd"]["ConvTrack"]):
         b_4 = TimeDistributed(Dense(para["n_inputs"]["ConvTrack"][x]))(b_4)
-        b_4 = Activation("relu")(b_4)
+        b_4 = LeakyReLU(alpha=para["alpha"])(b_4)
     b_4 = Sum()(b_4)
     for x in range(para["n_h"]["ConvTrack"]):
         b_4 = Dense(para["n_hiddens"]["ConvTrack"][x])(b_4)
-        b_4 = Activation("relu")(b_4)
+        b_4 = LeakyReLU(alpha=para["alpha"])(b_4)
     if bn:
         b_4 = BatchNormalization()(b_4)
 
     # Merge
     merged = Concatenate()([b_1, b_2, b_3, b_4])
+    merged = Dropout(para["dropout"])(merged)
     merged = Dense(para["n_fc1"])(merged)
-    merged = Activation("relu")(merged)
+    merged = LeakyReLU(alpha=para["alpha"])(merged)
+    merged = Dropout(para["dropout"])(merged)
     merged = Dense(para["n_fc2"])(merged)
-    merged = Activation("relu")(merged)
+    merged = LeakyReLU(alpha=para["alpha"])(merged)
 
     y = Dense(para["n_classes"], activation="softmax")(merged)
 

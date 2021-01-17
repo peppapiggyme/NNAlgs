@@ -1,16 +1,18 @@
 DSNN:
   batch_norm: 1
+  alpha: 0.05
+  dropout: 0.025
   n_features:
-    TauTrack: 6
-    NeutralPFO: 21
+    TauTrack: 10
+    NeutralPFO: 22
     ShotPFO: 6
-    ConvTrack: 6
+    ConvTrack: 10
   # For TDD (Phi)
   n_inputs:
-    TauTrack: [20,20,20]
+    TauTrack: [30,30,20]
     NeutralPFO: [80,80,60,60]
     ShotPFO: [20,20,20]
-    ConvTrack: [20,20,20]
+    ConvTrack: [30,30,20]
   n_tdd:
     TauTrack: 3
     NeutralPFO: 4

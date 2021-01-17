@@ -20,6 +20,18 @@ from nnalgs.utils.Logger import get_logger
 SEED = 42
 np.random.seed(SEED)
 
+# limit GPU memory usage
+limit = False
+if limit:
+    import tensorflow as tf
+    import keras.backend.tensorflow_backend as KTF
+
+    config = tf.ConfigProto()
+    config.gpu_options.per_process_gpu_memory_fraction = 0.3
+    session = tf.Session(config=config)
+
+    KTF.set_session(session)
+
 
 def train(cfg):
     # =========
@@ -84,6 +96,9 @@ def train(cfg):
     # ========
     # Training
     # ========
+    
+    if cfg["gpus"] < 1:
+        os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
     # the parallel model
     # model_gpu = multi_gpu_model(model, gpus=cfg['gpus'])
