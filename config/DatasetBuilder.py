@@ -14,11 +14,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'n_steps', 'log_vars', 'atan_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data/zhangb/r22-00/", "tree")
+        self._dataset.paths = walk_dir("/data/zhangb/r22-02/", "tree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
-        self._dataset.length = 13510000
+        self._dataset.length = 16850000
         # this must be consistent with the LMDB creation !
         # see: nnalgs/algs/LMDBCreators -> _get_removed_indices
         self._dataset.split = {"Train": 0.6, "Validation": 0.2, "Test": 0.2}
@@ -47,6 +47,10 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                          "TauTrack.d0SigTJVA",
                          "TauTrack.z0sinthetaTJVA",
                          "TauTrack.z0sinthetaSigTJVA", 
+                         "TauTrack.rnn_chargedScore",
+                         "TauTrack.rnn_isolationScore",
+                         "TauTrack.rnn_conversionScore",
+                         "TauTrack.rnn_fakeScore", 
                         ],
             "NeutralPFO": ["NeutralPFO.dphiECal",
                            "NeutralPFO.dphi",
@@ -91,6 +95,10 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                           "ConvTrack.d0SigTJVA",
                           "ConvTrack.z0sinthetaTJVA",
                           "ConvTrack.z0sinthetaSigTJVA", 
+                          "ConvTrack.rnn_chargedScore",
+                          "ConvTrack.rnn_isolationScore",
+                          "ConvTrack.rnn_conversionScore",
+                          "ConvTrack.rnn_fakeScore", 
                          ],
             "Label": ["TauJets.truthDecayMode"],
         }

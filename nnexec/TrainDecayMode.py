@@ -82,7 +82,7 @@ def train(cfg):
 
     csv_logger = CSVLogger(os.path.join(cfg['save_dir'], 'log.csv'))
 
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=4, min_lr=4e-5)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.4, patience=3, min_lr=4e-6)
 
     callbacks = [early_stopping, model_checkpoint, csv_logger, reduce_lr]
 

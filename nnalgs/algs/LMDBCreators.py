@@ -169,6 +169,8 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
                         self._preproc[ft]["mean"] = 0.0
                     elif ft.endswith(".dphiECal") or ft.endswith(".detaECal"):
                         self._preproc[ft]["mean"] = 0.0
+                    elif "rnn_" in ft and ft.endswith("Score"):
+                        self._preproc[ft]["mean"], self._preproc[ft]["std"] = 0.0, 0.5
                     # no prior knowledge
                     else:
                         pass
