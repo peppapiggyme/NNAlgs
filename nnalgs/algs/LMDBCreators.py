@@ -54,7 +54,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
             df.reset_index(drop=True, inplace=True)
 
             # Label shape is easy to deal with
-            if name == "Label":
+            if name == "Label" or name == "Weight":
                 assert len(vars) == 1
                 arr = np.asarray(df, dtype=self.dtype[name])
                 arr = arr.reshape(len(arr))
@@ -92,7 +92,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
                         f"maximum number of objects {longest}, will NOT fill with zeros!!!"
                     )
                     # if still want this feature, uncomment the line below
-                    arr = np.pad(arr, ((0, 0), (0, 0), (0, self.n_steps[name] - longest)))
+                    arr = np.pad(arr, ((0, 0), (0, self.n_steps[name] - longest), (0, 0)))
 
             # do some testing here if you want
             self._logger.debug(arr[:3])
@@ -101,7 +101,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
             # write the cache into database
             # like this {"NeutralPFO-019961013": array([1,2,3, ..., batch_size])}
             for i in range(arr.shape[0]):
-                if name != "Label" and arr[i].shape != (self.n_steps[name], len(vars)):
+                if name != "Label" and name != "Weight" and arr[i].shape != (self.n_steps[name], len(vars)):
                     self._logger.warning("{}-{:09d} has unexpected shape {}! This might cause crash at training time!".format(name, self._counter, arr[i].shape))
                 key = "{}-{:09d}".format(name, self._counter)
                 self._cache[key] = arr[i].copy(order='C')  # C
@@ -120,7 +120,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
         for name, fts in self.data.items():
 
             # Skip Label ...
-            if name == "Label":
+            if name == "Label" or name == "Weight":
                 continue
 
             # loop over fts -> features of each branch
@@ -154,7 +154,7 @@ class DecayModeLMDBCreator(BaseLMDBCreator, metaclass=ABCMeta):
 
     def _save_to_json(self):
         for name, fts in self.data.items():
-            if name == "Label":
+            if name == "Label" or name == "Weight":
                 continue
             d_fts = {'name': name, 'variables': []}
             for ft, stat in self._preproc.items():

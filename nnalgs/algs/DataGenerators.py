@@ -31,8 +31,8 @@ class DecayModeDataGenerator(BaseDataGenerator):
         """DocString"""
         input_features = []
 
-        for name in self.branch[:-1]:
-            assert name != "Label"
+        for name in self.branch[:-2]:
+            assert name != "Label" and name != "Weight"
 
             # Initialization
             input_feature = np.empty((self.batch_size, *self.shape[name]))
@@ -50,7 +50,7 @@ class DecayModeDataGenerator(BaseDataGenerator):
 
     def _generate_target(self, list_idx_temp):
         """DocString"""
-        name = self.branch[-1]
+        name = self.branch[-2]
         assert name == "Label"
 
         y = np.empty((self.batch_size, *self.shape[name]), dtype=int)
@@ -63,6 +63,20 @@ class DecayModeDataGenerator(BaseDataGenerator):
             y[i, ...] = arr_buf
 
         return to_categorical(y, self.n_classes)
+
+    def _generate_weight(self, list_idx_temp):
+        """DocString"""
+        name = self.branch[-1]
+        assert name == "Weight"
+
+        w = np.empty((self.batch_size, *self.shape[name]))
+        for i, ID in enumerate(list_idx_temp):
+            # Store sample
+            arr_bin = self._txn.get("{}-{:09d}".format(name, ID).encode())
+            arr_buf = np.frombuffer(arr_bin, dtype=self.dtype[name]).reshape(self.shape[name])
+            w[i, ...] = arr_buf
+            
+        return w
 
     def load_lmdb(self, **kwargs):
         """
@@ -110,9 +124,10 @@ class DecayModeDataGenerator(BaseDataGenerator):
 
         # Generate data
         input_features = self._generate_input(list_idx_temp)
+        weight = self._generate_weight(list_idx_temp)
 
         if self.to_fit:
             target = self._generate_target(list_idx_temp)
-            return input_features, target
+            return input_features, target, weight
         else:
-            return input_features
+            return input_features, weight

@@ -3,10 +3,10 @@ DSNN:
   alpha: 0.05
   dropout: 0.025
   n_features:
-    TauTrack: 14
+    TauTrack: 10
     NeutralPFO: 22
     ShotPFO: 6
-    ConvTrack: 14
+    ConvTrack: 10
   # For TDD (Phi)
   n_inputs:
     TauTrack: [30,30,20]

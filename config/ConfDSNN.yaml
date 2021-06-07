@@ -11,5 +11,5 @@ DSNN:
   save_dir: "NNAlgs/saved/dsnn"
   tune: "dsnn_tune"
   tune_model: "ModelBuildDSNN"
-  verbose: 2
+  verbose: 1
   opt: "adam"

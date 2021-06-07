@@ -14,15 +14,15 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'n_steps', 'log_vars', 'atan_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data/zhangb/r22-02/", "tree")
+        self._dataset.paths = walk_dir("/data1/bowenzhang/r22-03/", "tree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
-        self._dataset.length = 16850000
+        self._dataset.length = 3264114 * 5
         # this must be consistent with the LMDB creation !
         # see: nnalgs/algs/LMDBCreators -> _get_removed_indices
         self._dataset.split = {"Train": 0.6, "Validation": 0.2, "Test": 0.2}
-        self._dataset.batch_size = {"Train": 200, "Validation": 500000, "Test": 500000}
+        self._dataset.batch_size = {"Train": 200, "Validation": 100000, "Test": 100000}
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {
@@ -47,10 +47,10 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                          "TauTrack.d0SigTJVA",
                          "TauTrack.z0sinthetaTJVA",
                          "TauTrack.z0sinthetaSigTJVA", 
-                         "TauTrack.rnn_chargedScore",
-                         "TauTrack.rnn_isolationScore",
-                         "TauTrack.rnn_conversionScore",
-                         "TauTrack.rnn_fakeScore", 
+                         #"TauTrack.rnn_chargedScore",
+                         #"TauTrack.rnn_isolationScore",
+                         #"TauTrack.rnn_conversionScore",
+                         #"TauTrack.rnn_fakeScore", 
                         ],
             "NeutralPFO": ["NeutralPFO.dphiECal",
                            "NeutralPFO.dphi",
@@ -95,12 +95,13 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                           "ConvTrack.d0SigTJVA",
                           "ConvTrack.z0sinthetaTJVA",
                           "ConvTrack.z0sinthetaSigTJVA", 
-                          "ConvTrack.rnn_chargedScore",
-                          "ConvTrack.rnn_isolationScore",
-                          "ConvTrack.rnn_conversionScore",
-                          "ConvTrack.rnn_fakeScore", 
+                          #"ConvTrack.rnn_chargedScore",
+                          #"ConvTrack.rnn_isolationScore",
+                          #"ConvTrack.rnn_conversionScore",
+                          #"ConvTrack.rnn_fakeScore", 
                          ],
             "Label": ["TauJets.truthDecayMode"],
+            "Weight": ["TauJets.beamSpotWeight"],
         }
 
         self._dataset.sel_vars = ["TauJets.truthDecayMode", "TauJets.mcEventNumber"]
@@ -112,6 +113,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
             "ShotPFO": np.float32,
             "ConvTrack": np.float32,
             "Label": np.long,
+            "Weight": np.float32,
         }
 
         # number of objects per tau
@@ -121,6 +123,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
             "ShotPFO": 6,
             "ConvTrack": 4,
             "Label": None,
+            "Weight": None,
         }
 
         self._dataset.log_vars = {
@@ -153,11 +156,11 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
 #             "ConvTrack.z0sinthetaSigTJVA", 
         }
 
-        self._dataset.branch = ["TauTrack", "NeutralPFO", "ShotPFO", "ConvTrack", "Label"]
+        self._dataset.branch = ["TauTrack", "NeutralPFO", "ShotPFO", "ConvTrack", "Label", "Weight"]
 
         self._dataset.shape = dict()
         for name in self._dataset.branch:
-            if name == "Label":
+            if name == "Label" or name == "Weight":
                 self._dataset.shape[name] = ()  # HC ! Be careful !
             else:
                 self._dataset.shape[name] = (self._dataset.n_steps[name], len(self._dataset.data[name]))
