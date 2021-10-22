@@ -22,7 +22,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         # this must be consistent with the LMDB creation !
         # see: nnalgs/algs/LMDBCreators -> _get_removed_indices
         self._dataset.split = {"Train": 0.6, "Validation": 0.2, "Test": 0.2}
-        self._dataset.batch_size = {"Train": 200, "Validation": 100000, "Test": 100000}
+        self._dataset.batch_size = {"Train": 1000, "Validation": 100000, "Test": 100000}
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {
