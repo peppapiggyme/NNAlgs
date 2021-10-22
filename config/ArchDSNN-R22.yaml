@@ -1,6 +1,5 @@
 DSNN:
   batch_norm: 1
-  alpha: 0.05
   dropout: 0.025
   n_features:
     TauTrack: 10
