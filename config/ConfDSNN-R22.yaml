@@ -8,7 +8,7 @@ DSNN:
   arch: "NNAlgs/config/ArchDSNN-R22.yaml"
   epochs: 100
   patience: 10
-  save_dir: "NNAlgs/saved/baseline_dsnn_r22/"
+  save_dir: "NNAlgs/saved/baseline_dsnn_r22_batch1k/"
   tune: "dsnn_tune"
   tune_model: "ModelBuildDSNN"
   verbose: 2

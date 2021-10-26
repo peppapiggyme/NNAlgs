@@ -155,26 +155,30 @@ def ModelLSTM(config_file, mask_value=0.0, unroll=True):
 
     go_backwards = True if para["backwards"] == 1 else False
     bi_lstm = True if para["bidirectional"] == 1 else False
-
+    bn = True if para["batch_norm"] == 1 else False
+    
     # Branch 1
     x_1 = Input(shape=(para["n_steps"]["TauTrack"], para["n_features"]["TauTrack"]))
     mask_1 = Masking(mask_value=mask_value)(x_1)
-    lstm_1 = TimeDistributed(Dense(para["n_inputs"]["TauTrack"], activation="relu"))(mask_1)
+    for i in range(para["n_tdd_layers"]["TauTrack"]):
+        mask_1 = TimeDistributed(Dense(para["n_inputs"]["TauTrack"][i], activation="relu"))(mask_1)
     for i in range(para["n_layers"]["TauTrack"]):
         seq = True if i < (para["n_layers"]["TauTrack"] - 1) else False
 
         lstm_here = LSTM(para["n_hiddens"]["TauTrack"], return_sequences=seq,
                          unroll=unroll, go_backwards=go_backwards)
         if bi_lstm:
-            lstm_1 = Bidirectional(lstm_here)(lstm_1)
+            lstm_1 = Bidirectional(lstm_here)(mask_1)
         else:
-            lstm_1 = lstm_here(lstm_1)
+            lstm_1 = lstm_here(mask_1)
+        if bn:
+            lstm_1 = BatchNormalization()(lstm_1)
 
     # Branch 2
     x_2 = Input(shape=(para["n_steps"]["NeutralPFO"], para["n_features"]["NeutralPFO"]))
     mask_2 = Masking(mask_value=mask_value)(x_2)
     for i in range(para["n_tdd_layers"]["NeutralPFO"]):
-        lstm_2 = TimeDistributed(Dense(para["n_inputs"]["NeutralPFO"][i], activation="relu"))(mask_2)
+        mask_2 = TimeDistributed(Dense(para["n_inputs"]["NeutralPFO"][i], activation="relu"))(mask_2)
     for i in range(para["n_layers"]["NeutralPFO"]):
         seq = True if i < (para["n_layers"]["NeutralPFO"] - 1) else False
 
@@ -182,38 +186,46 @@ def ModelLSTM(config_file, mask_value=0.0, unroll=True):
                          unroll=unroll, go_backwards=go_backwards)
 
         if bi_lstm:
-            lstm_2 = Bidirectional(lstm_here)(lstm_2)
+            lstm_2 = Bidirectional(lstm_here)(mask_2)
         else:
-            lstm_2 = lstm_here(lstm_2)
-
+            lstm_2 = lstm_here(mask_2)
+        if bn:
+            lstm_2 = BatchNormalization()(lstm_2)
+            
     # Branch 3
     x_3 = Input(shape=(para["n_steps"]["ShotPFO"], para["n_features"]["ShotPFO"]))
     mask_3 = Masking(mask_value=mask_value)(x_3)
-    lstm_3 = TimeDistributed(Dense(para["n_inputs"]["ShotPFO"], activation="relu"))(mask_3)
+    for i in range(para["n_tdd_layers"]["ShotPFO"]):
+        mask_3 = TimeDistributed(Dense(para["n_inputs"]["ShotPFO"][i], activation="relu"))(mask_3)
     for i in range(para["n_layers"]["ShotPFO"]):
         seq = True if i < (para["n_layers"]["ShotPFO"] - 1) else False
 
         lstm_here = LSTM(para["n_hiddens"]["ShotPFO"], return_sequences=seq,
                          unroll=unroll, go_backwards=go_backwards)
         if bi_lstm:
-            lstm_3 = Bidirectional(lstm_here)(lstm_3)
+            lstm_3 = Bidirectional(lstm_here)(mask_3)
         else:
-            lstm_3 = lstm_here(lstm_3)
+            lstm_3 = lstm_here(mask_3)
+        if bn:
+            lstm_3 = BatchNormalization()(lstm_3)
 
     # Branch 4
     x_4 = Input(shape=(para["n_steps"]["ConvTrack"], para["n_features"]["ConvTrack"]))
     mask_4 = Masking(mask_value=mask_value)(x_4)
-    lstm_4 = TimeDistributed(Dense(para["n_inputs"]["ConvTrack"], activation="relu"))(mask_4)
+    for i in range(para["n_tdd_layers"]["ConvTrack"]):
+        mask_4 = TimeDistributed(Dense(para["n_inputs"]["ConvTrack"][i], activation="relu"))(mask_4)
     for i in range(para["n_layers"]["ConvTrack"]):
         seq = True if i < (para["n_layers"]["ConvTrack"] - 1) else False
 
         lstm_here = LSTM(para["n_hiddens"]["ConvTrack"], return_sequences=seq,
                          unroll=unroll, go_backwards=go_backwards)
         if bi_lstm:
-            lstm_4 = Bidirectional(lstm_here)(lstm_4)
+            lstm_4 = Bidirectional(lstm_here)(mask_4)
         else:
-            lstm_4 = lstm_here(lstm_4)
-
+            lstm_4 = lstm_here(mask_4)
+        if bn:
+            lstm_4 = BatchNormalization()(lstm_4)
+            
     # Merge
     merged_branches = Concatenate()([lstm_1, lstm_2, lstm_3, lstm_4])
 
