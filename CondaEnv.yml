@@ -148,4 +148,4 @@ dependencies:
     - tabulate==0.8.7
     - terminaltables==3.1.0
     - tqdm==4.54.0
-prefix: /home/bowenzhang/anaconda3/envs/decaymode
+prefix: /scratchfs/atlas/bowenzhang/anaconda3/envs/decaymode
