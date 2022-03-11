@@ -14,7 +14,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
                                   'n_steps', 'log_vars', 'atan_vars', 'branch', 'shape']
 
         self._dataset.concrete_dataset = DecayModeDataGenerator
-        self._dataset.paths = walk_dir("/data1/bowenzhang/r22-03/", "tree")
+        self._dataset.paths = walk_dir("/data/zhangb/r22-04/", "tree")
         self._dataset.tree_name = "tree"
         self._dataset.lmdb_dir = "NNAlgs/data/lmdb/decaymode/"
         self._dataset.json_dir = "NNAlgs/data/json/decaymode/"
@@ -22,7 +22,7 @@ class DecayModePi0varBuilder(AbsDatasetBuilder):
         # this must be consistent with the LMDB creation !
         # see: nnalgs/algs/LMDBCreators -> _get_removed_indices
         self._dataset.split = {"Train": 0.6, "Validation": 0.2, "Test": 0.2}
-        self._dataset.batch_size = {"Train": 200, "Validation": 100000, "Test": 100000}
+        self._dataset.batch_size = {"Train": 1000, "Validation": 100000, "Test": 100000}
         self._dataset.mode = mode
 
         self._dataset.lmdb_kwargs = {

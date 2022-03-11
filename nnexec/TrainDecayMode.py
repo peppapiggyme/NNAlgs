@@ -4,6 +4,7 @@ Training script
 """
 
 import os
+import pathlib
 from functools import partial
 
 import numpy as np
@@ -63,6 +64,7 @@ def train(cfg):
     # ======
 
     arch = model.to_json()
+    pathlib.Path(cfg['save_dir']).mkdir(parents=True, exist_ok=True)
     with open(os.path.join(cfg['save_dir'], 'architecture.json'), 'w') as arch_file:
         arch_file.write(arch)
 

@@ -1,0 +1,41 @@
+LSTM:
+  # LSTMs
+  batch_norm: 1
+  backwards: 0
+  bidirectional: 0
+  n_features:
+    TauTrack: 10
+    NeutralPFO: 22
+    ShotPFO: 6
+    ConvTrack: 10
+  # for TD
+  n_inputs:
+    TauTrack: [30,30,20]
+    NeutralPFO: [80,80,60,40]
+    ShotPFO: [20,20,20]
+    ConvTrack: [30,30,20]
+  # for LSTM
+  n_hiddens:
+    TauTrack: 20
+    NeutralPFO: 40
+    ShotPFO: 20
+    ConvTrack: 20
+  n_steps:
+    TauTrack: 3
+    NeutralPFO: 8
+    ShotPFO: 6
+    ConvTrack: 4
+  n_layers:
+    TauTrack: 1
+    NeutralPFO: 1
+    ShotPFO: 1
+    ConvTrack: 1
+  n_tdd_layers:
+    TauTrack: 3
+    NeutralPFO: 4
+    ShotPFO: 3
+    ConvTrack: 3
+  # FC
+  n_fc1: 100
+  n_fc2: 50
+  n_classes: 5
